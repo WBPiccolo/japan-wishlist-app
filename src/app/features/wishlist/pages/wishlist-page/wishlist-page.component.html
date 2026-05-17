@@ -3,6 +3,8 @@
 
 
 wishlist:
-@for(item of wishlistStore.items(); track $index) {
-    <div>{{item.name}}</div>
-}
+<div class="flex flex-row flex-wrap gap-4">
+    @for(item of wishlistStore.items(); track $index) {
+        <app-wishlist-item [item]="item" class="basis-1/5"></app-wishlist-item>
+    }
+</div>

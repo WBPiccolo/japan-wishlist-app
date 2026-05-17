@@ -1,1 +1,43 @@
-<p>wishlist-item works!</p>
+<div class="max-w-80 rounded-xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden">
+  
+  <!-- Image -->
+  <div class="h-48 w-full overflow-hidden bg-slate-50">
+    <img 
+      [src]="item?.imageURL"
+      class="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
+    />
+  </div>
+
+  <!-- Content -->
+  <div class="p-4 flex flex-col gap-2">
+
+    <!-- Title -->
+    <div class="text-lg font-semibold tracking-wide text-slate-800">
+      {{ item?.name }}
+    </div>
+
+    <!-- Description -->
+    <div class="text-sm text-slate-500 leading-relaxed line-clamp-2">
+      {{ item?.description }}
+    </div>
+
+    <!-- Price -->
+    <div class="flex justify-between items-center mt-2">
+      <div class="text-sm text-slate-600">
+        ¥ {{ item?.minPrice }} - ¥ {{ item?.maxPrice }}
+      </div>
+
+      <!-- Status -->
+      <div 
+        class="text-xs px-2 py-1 rounded-full"
+        [ngClass]="{
+          'bg-green-50 text-green-600': item?.status === 'purchased',
+          'bg-amber-50 text-amber-700': item?.status !== 'purchased'
+        }"
+      >
+        {{ item?.status }}
+      </div>
+    </div>
+
+  </div>
+</div>
