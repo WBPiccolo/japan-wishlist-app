@@ -1,0 +1,8 @@
+<p>wishlist-page works!</p>
+<div class="p-2 bg-yellow-200 cursor-pointer hover:italic" (click)="addMockItemToWishlist()">mock pagina wishlist clicca qui per aggiungere un item alla wishlist</div>
+
+
+wishlist:
+@for(item of wishlistStore.items(); track $index) {
+    <div>{{item.name}}</div>
+}
