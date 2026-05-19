@@ -1,10 +1,8 @@
-<p>wishlist-page works!</p>
 <div class="p-2 bg-yellow-200 cursor-pointer hover:italic" (click)="addMockItemToWishlist()">mock pagina wishlist clicca qui per aggiungere un item alla wishlist</div>
-
 
 wishlist:
 <div class="flex flex-row flex-wrap gap-4">
-    @for(item of wishlistStore.items(); track $index) {
+    @for(item of firebaseObs | async; track $index) {
         <app-wishlist-item [item]="item" class="basis-1/5"></app-wishlist-item>
     }
 </div>

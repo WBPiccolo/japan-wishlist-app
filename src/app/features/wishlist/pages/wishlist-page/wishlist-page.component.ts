@@ -1,24 +1,30 @@
-import { Component, inject } from '@angular/core';
-import { WishlistStore } from '../../store/wishlist.store';
+import { Component, inject, OnInit } from '@angular/core';
 import { WishlistItem } from '../../../../shared/models/wishlist-item.model';
 import { WishlistItemComponent } from '../../components/wishlist-item/wishlist-item.component';
+import { FirebaseWishlistService } from '../../services/firebase-wishlist-service';
+import { Observable } from 'rxjs';
+import { AsyncPipe, CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-wishlist-page',
-  imports: [WishlistItemComponent],
+  imports: [WishlistItemComponent, CommonModule, AsyncPipe],
   templateUrl: './wishlist-page.component.html',
   styleUrl: './wishlist-page.component.scss',
 })
-export class WishlistPageComponent {
-  wishlistStore = inject(WishlistStore);
+export class WishlistPageComponent implements OnInit{
+  firebaseWishlist = inject(FirebaseWishlistService)
+  firebaseObs: Observable<any> = new Observable();
+  ngOnInit(): void {
+    this.firebaseObs = this.firebaseWishlist.test();
+  }
 
   addMockItemToWishlist() {
     console.log('aggiungo un item mock alla wishlist')
-    this.wishlistStore.addItemToWishlist(mockWishlist[Math.floor(Math.random()*3)])
+    //this.wishlistStore.addItemToWishlist(mockWishlist[Math.floor(Math.random()*3)])
   }
 }
 
- const mockWishlist: any[] = [
+ const mockWishlist: WishlistItem[] = [
   {
     name: 'Matcha KitKat Premium Edition',
     imageURL: 'https://m.media-amazon.com/images/I/916mcqXLjHL._AC_UF894,1000_QL80_.jpg',
