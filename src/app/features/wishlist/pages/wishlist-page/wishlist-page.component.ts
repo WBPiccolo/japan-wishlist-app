@@ -4,52 +4,53 @@ import { WishlistItemComponent } from '../../components/wishlist-item/wishlist-i
 import { FirebaseWishlistService } from '../../services/firebase-wishlist-service';
 import { Observable } from 'rxjs';
 import { AsyncPipe, CommonModule } from '@angular/common';
+import { UpdateItemDialogComponent } from '../../components/update-item-dialog/update-item-dialog.component';
 
 @Component({
   selector: 'app-wishlist-page',
-  imports: [WishlistItemComponent, CommonModule, AsyncPipe],
+  imports: [WishlistItemComponent, AsyncPipe, UpdateItemDialogComponent],
   templateUrl: './wishlist-page.component.html',
   styleUrl: './wishlist-page.component.scss',
 })
-export class WishlistPageComponent implements OnInit{
-  firebaseWishlist = inject(FirebaseWishlistService)
-  firebaseObs: Observable<any> = new Observable();
+export class WishlistPageComponent implements OnInit {
+  wishlistService = inject(FirebaseWishlistService)
+  wishlistObs$: Observable<WishlistItem[]> = new Observable();
+
+  itemToUpdate: WishlistItem | null = null
+  showUpdateItemDialog: boolean = false;
+
   ngOnInit(): void {
-    this.firebaseObs = this.firebaseWishlist.test();
+    this.wishlistObs$ = this.wishlistService.getWishlistItems();
   }
 
   addMockItemToWishlist() {
     console.log('aggiungo un item mock alla wishlist')
     //this.wishlistStore.addItemToWishlist(mockWishlist[Math.floor(Math.random()*3)])
   }
-}
 
- const mockWishlist: WishlistItem[] = [
-  {
-    name: 'Matcha KitKat Premium Edition',
-    imageURL: 'https://m.media-amazon.com/images/I/916mcqXLjHL._AC_UF894,1000_QL80_.jpg',
-    description: 'Limited edition KitKat al matcha disponibile solo in Giappone.',
-    location: 'Tokyo',
-    minPrice: '¥300',
-    maxPrice: '¥800',
-    status: 'available'
-  },
-  {
-    name: 'Pokémon Center Plush Pikachu',
-    imageURL: 'https://wafuu.com/cdn/shop/products/pokemon-center-limited-running-pikachu-plush-doll-from-japan-555386.jpg?v=1695256287',
-    description: 'Peluches esclusivi venduti nei Pokémon Center giapponesi.',
-    location: 'Osaka Pokémon Center',
-    minPrice: '¥1500',
-    maxPrice: '¥3500',
-    status: 'wishlist'
-  },
-  {
-    name: 'Gundam Model RX-78-2',
-    imageURL: 'https://i.ebayimg.com/images/g/XXQAAOSwjilnydJ6/s-l1200.png',
-    description: 'Model kit Gunpla High Grade versione RX-78-2.',
-    location: 'Akihabara',
-    minPrice: '¥1200',
-    maxPrice: '¥5000',
-    status: 'purchased'
+  handleItemClick(item: WishlistItem) {
+    console.log('clicked item', item);
+    this.itemToUpdate = item;
+    this.showUpdateItemDialog = true;
   }
-];
+
+  handleItemBought(price: number) {
+    const updatedItem: WishlistItem = {...this.itemToUpdate!, status: 'BOUGHT', price: price}
+    this.wishlistService.updateItem(updatedItem);
+    this.itemToUpdate = null;
+    this.handleCloseUpdateItemDialog();
+  }
+
+  handleResetItemStatus() {
+    const resettedItem: WishlistItem = {...this.itemToUpdate!, status: 'NOT_BOUGHT', price: null}
+    this.wishlistService.updateItem(resettedItem);
+    this.itemToUpdate = null;
+    this.handleCloseUpdateItemDialog();
+
+  }
+
+  handleCloseUpdateItemDialog() {
+    this.showUpdateItemDialog = false;
+  }
+
+}
