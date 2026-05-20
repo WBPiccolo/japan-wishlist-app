@@ -1,0 +1,21 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import 'tailwindcss';
+
+.theme1{
+    .add-item-banner {
+        background-color: red;
+    }
+}
+
+.theme2{
+    .add-item-banner {
+        background-color: blue;
+    }
+}
+
+.theme3{
+    .add-item-banner {
+        background-color: green;
+    }
+}

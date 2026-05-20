@@ -1,1 +1,4 @@
-<p>header works!</p>
+<div class="flex flex-row justify-end">
+    <p>header works!</p>
+    <p-select [options]="themes" [(ngModel)]="themeModel" class="w-full md:w-56" (ngModelChange)="themePicked()"/>
+</div>

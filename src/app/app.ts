@@ -11,4 +11,9 @@ import { HeaderComponent } from './shared/components/header/header.component';
 })
 export class App {
   protected readonly title = signal('japan-wishlist-app');
+  selectedTheme: string = '';
+
+  setTheme(theme: string){
+    this.selectedTheme = theme;  
+  }
 }
