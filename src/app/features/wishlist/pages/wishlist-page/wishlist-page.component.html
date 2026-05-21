@@ -1,21 +1,13 @@
-<div>
-   <p-toggleswitch [(ngModel)]="isAdminMode" />
+<div class="flex flex-row items-center justify-end gap-4 p-2 h-[42px]">
+   <div class="flex items-center gap-2">Admin Mode <p-toggleswitch [(ngModel)]="isAdminMode" /></div>
    @if (isAdminMode) {
-      admin mode!
+      <p-button (click)="openAddItemDialog()">+</p-button>
    }
 </div>
-<div
-   class="p-2 bg-yellow-200 cursor-pointer hover:italic"
-   (click)="addMockItemToWishlist()"
->
-   mock pagina wishlist clicca qui per aggiungere un item alla wishlist
-</div>
 
-wishlist:
 <div class="flex flex-row flex-wrap gap-4">
    @for (item of wishlistObs$ | async; track $index) {
-      @if (hideDeleted && item.isDeleted) {
-      } @else {
+      @if (isAdminMode || !hideDeleted || !item.isDeleted) {
          <app-wishlist-item
             class="basis-1/5 cursor-pointer"
             [canDelete]="isAdminMode"
@@ -33,3 +25,12 @@ wishlist:
    (itemBought)="handleItemBought($event)"
    (undoBought)="handleResetItemStatus()"
 ></app-update-item-dialog>
+
+<app-add-item-dialog
+   [visible]="showAddItemDialog"
+   (closeDialog)="handleCloseAddItemDialog()"
+   (saveItem)="saveNewItem($event)"
+></app-add-item-dialog>
+
+<p-toast />
+<p-confirmdialog />

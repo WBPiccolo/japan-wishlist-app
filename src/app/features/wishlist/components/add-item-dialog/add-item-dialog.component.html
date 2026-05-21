@@ -1,1 +1,83 @@
-<p>add-item-dialog works!</p>
+<p-dialog
+   header="Add new Item"
+   [modal]="true"
+   [(visible)]="visible"
+   (onShow)="initDialog()"
+   (onHide)="handleCloseDialog()"
+   [style]="{ width: '50rem', height: '80vh' }"
+>
+   <form
+      [formGroup]="newItemFormGroup"
+      class="flex flex-col gap-2"
+   >
+      <div class="flex flex-col gap-2">
+         <label for="name">Name</label>
+         <input
+            pInputText
+            id="name"
+            formControlName="name"
+         />
+      </div>
+      <div class="flex flex-col gap-2">
+         <label for="imageURL">Image URL</label>
+         <input
+            pInputText
+            id="imageURL"
+            formControlName="imageURL"
+         />
+      </div>
+      @if (newItemFormGroup.value.imageURL) {
+         <img
+            [src]="newItemFormGroup.value.imageURL"
+            class="h-32 w-full object-cover transition-transform duration-300 hover:h-full"
+         />
+      }
+
+      <div class="flex flex-col gap-2">
+         <label for="imageURL">Description</label>
+         <textarea
+            rows="3"
+            cols="30"
+            pTextarea
+            formControlName="description"
+         ></textarea>
+      </div>
+
+      <div class="flex flex-col gap-2">
+         <label for="location">Location</label>
+         <input
+            pInputText
+            id="location"
+            formControlName="location"
+         />
+      </div>
+      <div class="flex flex-col gap-2">
+         Price €
+         <div class="flex flex-row justify-between">
+            <div class="flex flex-col gap-2">
+               <label for="min">Min</label>
+               <p-inputnumber
+                  formControlName="minPrice"
+                  inputStyleClass="h-10 p-4 w-80 border rounded-sm border-slate-200"
+                  [min]="0"
+                  [max]="newItemFormGroup.value.maxPrice"
+               />
+            </div>
+            <div class="flex flex-col gap-2">
+               <label for="max">Max</label>
+               <p-inputnumber
+                  formControlName="maxPrice"
+                  inputStyleClass="h-10 p-4 w-80 border rounded-sm border-slate-200"
+                  [min]="newItemFormGroup.value.minPrice"
+               />
+            </div>
+         </div>
+      </div>
+   </form>
+
+   <ng-template #footer>
+      <div class="text-center w-full">
+         <p-button (click)="handleSaveItem()">Add Item</p-button>
+      </div>
+   </ng-template>
+</p-dialog>

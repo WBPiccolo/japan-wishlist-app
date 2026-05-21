@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core'
 import { Firestore, collection, collectionData } from '@angular/fire/firestore' // ← tutto da @angular/fire
 import { Observable, of } from 'rxjs'
 import { WishlistItem } from '../../../shared/models/wishlist-item.model'
-import { doc, updateDoc } from 'firebase/firestore'
+import { addDoc, doc, updateDoc } from 'firebase/firestore'
 
 @Injectable({
    providedIn: 'root',
@@ -24,5 +24,9 @@ export class FirebaseWishlistService {
       console.log('updateItem', id, data)
       const ref = doc(this.firestore, 'wishlist', id)
       await updateDoc(ref, data)
+   }
+
+   async addItem(item: WishlistItem): Promise<void> {
+      await addDoc(this.col, { ...item, isDeleted: false, status: 'NOT_BOUGHT' })
    }
 }

@@ -1,6 +1,7 @@
 <div
    #card
    class="max-w-80 rounded-xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden"
+   [ngClass]="{ 'opacity-30': item?.isDeleted }"
    (click)="itemClicked.emit()"
 >
    <!-- Image -->
@@ -12,7 +13,7 @@
    </div>
 
    <!-- Content -->
-   <div class="p-4 flex flex-col gap-2">
+   <div class="p-4 flex flex-col gap-2 h-40">
       <!-- Title -->
       <div class="text-lg font-semibold tracking-wide text-slate-800">
          {{ item?.name }}

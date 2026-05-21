@@ -11,10 +11,21 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog'
 import { ButtonModule } from 'primeng/button'
 import { ToastModule } from 'primeng/toast'
 import { ConfirmationService, MessageService } from 'primeng/api'
+import { AddItemDialogComponent } from '../../components/add-item-dialog/add-item-dialog.component'
 
 @Component({
    selector: 'app-wishlist-page',
-   imports: [WishlistItemComponent, AsyncPipe, UpdateItemDialogComponent, ToggleSwitchModule, FormsModule, ButtonModule, ConfirmDialogModule, ToastModule],
+   imports: [
+      WishlistItemComponent,
+      AsyncPipe,
+      UpdateItemDialogComponent,
+      ToggleSwitchModule,
+      FormsModule,
+      ButtonModule,
+      ConfirmDialogModule,
+      ToastModule,
+      AddItemDialogComponent,
+   ],
    templateUrl: './wishlist-page.component.html',
    styleUrl: './wishlist-page.component.scss',
 })
@@ -27,16 +38,13 @@ export class WishlistPageComponent implements OnInit {
    isAdminMode: boolean = false
    hideDeleted: boolean = true
 
+   showAddItemDialog: boolean = false
+
    private confirmationService = inject(ConfirmationService)
    private messageService = inject(MessageService)
 
    ngOnInit(): void {
       this.wishlistObs$ = this.wishlistService.getWishlistItems()
-   }
-
-   addMockItemToWishlist() {
-      console.log('aggiungo un item mock alla wishlist')
-      //this.wishlistStore.addItemToWishlist(mockWishlist[Math.floor(Math.random()*3)])
    }
 
    handleItemClick(item: WishlistItem) {
@@ -64,6 +72,7 @@ export class WishlistPageComponent implements OnInit {
    }
 
    handleDeleteItem(item: WishlistItem) {
+      console.log('handleDeleteItem', item)
       this.confirmationService.confirm({
          message: `Do you want to delete ${item.name}?`,
          header: 'Delete Item',
@@ -80,6 +89,7 @@ export class WishlistPageComponent implements OnInit {
          },
 
          accept: () => {
+            console.log('deleting item')
             this.deleteItem(item)
             this.messageService.add({
                severity: 'info',
@@ -91,5 +101,22 @@ export class WishlistPageComponent implements OnInit {
       })
    }
 
-   private deleteItem(item: WishlistItem) {}
+   private deleteItem(item: WishlistItem) {
+      console.log('deleting', item)
+      this.wishlistService.updateItem({ ...item, isDeleted: true })
+   }
+
+   openAddItemDialog() {
+      this.showAddItemDialog = true
+   }
+
+   handleCloseAddItemDialog() {
+      this.showAddItemDialog = false
+   }
+
+   saveNewItem(item: WishlistItem) {
+      console.log('aggiunta di', item)
+      this.wishlistService.addItem(item)
+      this.handleCloseAddItemDialog()
+   }
 }
