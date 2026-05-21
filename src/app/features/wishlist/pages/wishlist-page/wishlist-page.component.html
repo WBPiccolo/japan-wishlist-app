@@ -1,15 +1,35 @@
-<div class="p-2 bg-yellow-200 cursor-pointer hover:italic" (click)="addMockItemToWishlist()">mock pagina wishlist clicca qui per aggiungere un item alla wishlist</div>
+<div>
+   <p-toggleswitch [(ngModel)]="isAdminMode" />
+   @if (isAdminMode) {
+      admin mode!
+   }
+</div>
+<div
+   class="p-2 bg-yellow-200 cursor-pointer hover:italic"
+   (click)="addMockItemToWishlist()"
+>
+   mock pagina wishlist clicca qui per aggiungere un item alla wishlist
+</div>
 
 wishlist:
 <div class="flex flex-row flex-wrap gap-4">
-    @for(item of wishlistObs$ | async; track $index) {
-        <app-wishlist-item [item]="item" class="basis-1/5 cursor-pointer" (click)="handleItemClick(item)"></app-wishlist-item>
-    }
+   @for (item of wishlistObs$ | async; track $index) {
+      @if (hideDeleted && item.isDeleted) {
+      } @else {
+         <app-wishlist-item
+            class="basis-1/5 cursor-pointer"
+            [canDelete]="isAdminMode"
+            [item]="item"
+            (itemClicked)="handleItemClick(item)"
+            (deleteItemClicked)="handleDeleteItem(item)"
+         ></app-wishlist-item>
+      }
+   }
 </div>
-<app-update-item-dialog 
-    [visible]="showUpdateItemDialog"
-    [itemToUpdate]="itemToUpdate" 
-    (closeDialog)="handleCloseUpdateItemDialog()"
-    (itemBought)="handleItemBought($event)"
-    (undoBought)="handleResetItemStatus()"
+<app-update-item-dialog
+   [visible]="showUpdateItemDialog"
+   [itemToUpdate]="itemToUpdate"
+   (closeDialog)="handleCloseUpdateItemDialog()"
+   (itemBought)="handleItemBought($event)"
+   (undoBought)="handleResetItemStatus()"
 ></app-update-item-dialog>

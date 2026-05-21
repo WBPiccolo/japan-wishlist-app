@@ -1,24 +1,40 @@
-<p-dialog header="Edit Item Status" [modal]="true" [(visible)]="visible" (onHide)="closeDialog.emit()"
-    [style]="{ width: '50rem', height: '80vh' }">
-    <div class="h-60 w-full overflow-hidden bg-slate-50">
-        <img [src]="itemToUpdate?.imageURL" class="h-full w-full object-cover" />
-    </div>
-    <div class="flex flex-col justify-between items-center gap-4">
-        <span class="text-lg font-semibold my-8">{{itemToUpdate?.name}}</span>
-        <p-floatlabel>
-            <p-inputnumber [(ngModel)]="price" inputId="over_label" size="large"
-                inputStyleClass="h-10 p-4 w-80 border rounded-sm border-slate-200"
-                [disabled]="itemToUpdate?.status === 'BOUGHT'" />
-            <label for="over_label">Prezzo (€)</label>
-        </p-floatlabel>
-    </div>
-    <ng-template #footer>
-        <div class="text-center w-full">
-            @if(itemToUpdate?.status != 'BOUGHT') {
+<p-dialog
+   header="Edit Item Status"
+   [modal]="true"
+   [(visible)]="visible"
+   (onHide)="closeDialog.emit()"
+   [style]="{ width: '50rem', height: '80vh' }"
+>
+   <div class="h-60 w-full overflow-hidden bg-slate-50">
+      <img
+         [src]="itemToUpdate?.imageURL"
+         class="h-full w-full object-cover"
+      />
+   </div>
+   <div class="flex flex-col justify-between items-center gap-4">
+      <span class="text-lg font-semibold my-8">{{ itemToUpdate?.name }}</span>
+      <p-floatlabel>
+         <p-inputnumber
+            [(ngModel)]="price"
+            inputId="over_label"
+            size="large"
+            inputStyleClass="h-10 p-4 w-80 border rounded-sm border-slate-200"
+            [disabled]="itemToUpdate?.status === 'BOUGHT'"
+         />
+         <label for="over_label">Prezzo (€)</label>
+      </p-floatlabel>
+   </div>
+   <ng-template #footer>
+      <div class="text-center w-full">
+         @if (itemToUpdate?.status != 'BOUGHT') {
             <p-button (click)="itemBought.emit(price)">Comprato!</p-button>
-            } @else {
-            <p-button (click)="undoBought.emit()" severity="danger">Reset status</p-button>
-            }
-        </div>
-    </ng-template>
+         } @else {
+            <p-button
+               (click)="undoBought.emit()"
+               severity="danger"
+               >Reset status</p-button
+            >
+         }
+      </div>
+   </ng-template>
 </p-dialog>

@@ -1,16 +1,16 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing'
 
-import { FirebaseWishlistService } from './firebase-wishlist-service';
+import { FirebaseWishlistService } from './firebase-wishlist-service'
 
 describe('FirebaseWishlistService', () => {
-  let service: FirebaseWishlistService;
+   let service: FirebaseWishlistService
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(FirebaseWishlistService);
-  });
+   beforeEach(() => {
+      TestBed.configureTestingModule({})
+      service = TestBed.inject(FirebaseWishlistService)
+   })
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
-});
+   it('should be created', () => {
+      expect(service).toBeTruthy()
+   })
+})

@@ -1,14 +1,14 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { FooterComponent } from './shared/components/footer/footer.component';
-import { HeaderComponent } from './shared/components/header/header.component';
+import { Component, signal } from '@angular/core'
+import { RouterOutlet } from '@angular/router'
+import { FooterComponent } from './shared/components/footer/footer.component'
+import { HeaderComponent } from './shared/components/header/header.component'
 
 @Component({
-  selector: 'app-root',
-  imports: [RouterOutlet, /*HeaderComponent, FooterComponent*/],
-  templateUrl: './app.html',
-  styleUrl: './app.css'
+   selector: 'app-root',
+   imports: [RouterOutlet /*HeaderComponent, FooterComponent*/],
+   templateUrl: './app.html',
+   styleUrl: './app.css',
 })
 export class App {
-  protected readonly title = signal('japan-wishlist-app');
+   protected readonly title = signal('japan-wishlist-app')
 }
