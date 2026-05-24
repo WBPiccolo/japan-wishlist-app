@@ -94,7 +94,7 @@ export class WishlistPageComponent implements OnInit {
             this.messageService.add({
                severity: 'info',
                summary: 'Confirmed',
-               detail: 'Record deleted',
+               detail: 'Item deleted',
             })
          },
          reject: () => {},
@@ -104,6 +104,15 @@ export class WishlistPageComponent implements OnInit {
    private deleteItem(item: WishlistItem) {
       console.log('deleting', item)
       this.wishlistService.updateItem({ ...item, isDeleted: true })
+   }
+
+   handleRestoreItem(item: WishlistItem) {
+      this.wishlistService.updateItem({ ...item, isDeleted: false })
+      this.messageService.add({
+         severity: 'success',
+         summary: 'Confirmed',
+         detail: 'Item restored',
+      })
    }
 
    openAddItemDialog() {

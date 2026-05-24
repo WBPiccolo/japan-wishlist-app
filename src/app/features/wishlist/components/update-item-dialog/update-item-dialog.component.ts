@@ -5,9 +5,10 @@ import { ButtonModule } from 'primeng/button'
 import { InputNumberModule } from 'primeng/inputnumber'
 import { FormsModule } from '@angular/forms'
 import { FloatLabelModule } from 'primeng/floatlabel'
+import { CommonModule } from '@angular/common'
 @Component({
    selector: 'app-update-item-dialog',
-   imports: [DialogModule, InputNumberModule, ButtonModule, FormsModule, FloatLabelModule],
+   imports: [DialogModule, InputNumberModule, ButtonModule, FormsModule, FloatLabelModule, CommonModule],
    templateUrl: './update-item-dialog.component.html',
    styleUrl: './update-item-dialog.component.scss',
 })
@@ -19,4 +20,14 @@ export class UpdateItemDialogComponent {
    @Output() undoBought = new EventEmitter<number>()
 
    price: number = 0
+
+   isImageExpanded: boolean = false
+
+   initModal() {
+      this.isImageExpanded = false
+   }
+
+   toggleFullImage() {
+      this.isImageExpanded = !this.isImageExpanded
+   }
 }
