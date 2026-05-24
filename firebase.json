@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist/japan-wishlist/browser",
+    "public": "dist/japan-wishlist-app/browser",
     "ignore": [
       "firebase.json",
       "**/.*",
