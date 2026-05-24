@@ -1,7 +1,11 @@
-<div class="flex flex-row items-center justify-end gap-4 p-2 h-[42px]">
+<div class="flex flex-row items-center justify-start gap-4 px-2 py-4">
    <div class="flex items-center gap-2">Admin Mode <p-toggleswitch [(ngModel)]="isAdminMode" /></div>
    @if (isAdminMode) {
-      <p-button (click)="openAddItemDialog()">+</p-button>
+      <p-button
+         icon="pi pi-plus"
+         label="Add new item"
+         (click)="openAddItemDialog()"
+      ></p-button>
    }
 </div>
 
