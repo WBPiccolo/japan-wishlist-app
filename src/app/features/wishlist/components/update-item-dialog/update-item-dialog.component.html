@@ -1,44 +1,87 @@
 <p-dialog
-   header="Edit Item Status"
+   header="Edit item status"
    [modal]="true"
    [(visible)]="visible"
    (onShow)="initModal()"
    (onHide)="closeDialog.emit()"
-   [style]="{ width: '50rem', height: '80vh' }"
+   [style]="{ width: 'min(50rem, 95vw)', height: 'min(80vh, 720px)' }"
+   [contentStyle]="{ padding: '0', overflow: 'auto' }"
 >
+   <!-- Immagine espandibile -->
    <div
-      class="w-full overflow-hidden bg-slate-50 cursor-pointer transition-[max-height] duration-500 ease-in-out max-h-72 hover:max-h-[90vh]"
-      [class.max-h-[90vh]]="isImageExpanded"
+      class="relative overflow-hidden bg-surface-100 dark:bg-surface-800 cursor-pointer transition-all duration-500 ease-in-out"
+      [class.h-56]="!isImageExpanded"
+      [class.h-[60vh]]="isImageExpanded"
       (click)="toggleFullImage()"
    >
       <img
          [src]="itemToUpdate?.imageURL"
-         class="w-full h-full object-contain transition-transform duration-500 ease-out hover:scale-[1.02]"
+         [alt]="itemToUpdate?.name"
+         class="w-full h-full object-cover transition-transform duration-500 ease-out hover:scale-[1.02]"
       />
+      <!-- Hint espandi/comprimi -->
+      <div class="absolute bottom-2 right-2 flex items-center gap-1 rounded-full bg-black/40 px-2.5 py-1 text-xs text-white backdrop-blur-sm">
+         <i
+            [class]="isImageExpanded ? 'pi pi-compress' : 'pi pi-expand'"
+            class="text-[11px]"
+         ></i>
+         {{ isImageExpanded ? 'Comprimi' : 'Espandi' }}
+      </div>
    </div>
-   <div class="flex flex-col justify-between items-center gap-4">
-      <span class="text-lg font-semibold my-8">{{ itemToUpdate?.name }}</span>
-      <p-floatlabel>
-         <p-inputnumber
-            [(ngModel)]="price"
-            inputId="over_label"
-            size="large"
-            inputStyleClass="h-10 p-4 w-80 border rounded-sm border-slate-200"
-            [disabled]="itemToUpdate?.status === 'BOUGHT'"
-         />
-         <label for="over_label">Prezzo (€)</label>
-      </p-floatlabel>
+
+   <!-- Contenuto -->
+   <div class="flex flex-col items-center gap-12 p-6">
+      <!-- Nome + status badge -->
+      <div class="flex flex-col items-center gap-2 text-center">
+         <span class="text-xl font-semibold text-surface-900 dark:text-surface-0">
+            {{ itemToUpdate?.name }}
+         </span>
+         <span class="italic text-sm">
+            {{ itemToUpdate?.location }}
+         </span>
+         <span class="italic text-sm">
+            {{ itemToUpdate?.description }}
+         </span>
+         <div class="flex flex-row">{{ itemToUpdate?.minPrice | currency: 'EUR' }} ~ {{ itemToUpdate?.maxPrice | currency: 'EUR' }}</div>
+      </div>
+
+      <!-- Input prezzo -->
+      <div class="w-full max-w-xs">
+         <p-floatlabel class="w-full">
+            <p-inputnumber
+               [(ngModel)]="price"
+               inputId="price_label"
+               size="large"
+               [disabled]="itemToUpdate?.status === 'BOUGHT'"
+               inputStyleClass="w-full h-11 px-4 border rounded-lg border-surface-300 dark:border-surface-600"
+               class="w-full"
+            />
+            <label for="price_label">Prezzo (€)</label>
+         </p-floatlabel>
+      </div>
+      @if (itemToUpdate!.maxPrice && price) {
+         <div>Il prezzo a cui lo stai prendendo è {{ price / itemToUpdate!.maxPrice | percent }} del prezzo massimo!</div>
+      }
    </div>
+
    <ng-template #footer>
-      <div class="text-center w-full">
-         @if (itemToUpdate?.status != 'BOUGHT') {
-            <p-button (click)="itemBought.emit(price)">Comprato!</p-button>
+      <div class="flex justify-center w-full px-6 py-4">
+         @if (itemToUpdate?.status !== 'BOUGHT') {
+            <p-button
+               icon="pi pi-shopping-cart"
+               label="Comprato!"
+               (click)="itemBought.emit(price)"
+               class="w-full sm:w-auto"
+            />
          } @else {
             <p-button
-               (click)="undoBought.emit()"
+               icon="pi pi-undo"
+               label="Reset status"
                severity="danger"
-               >Reset status</p-button
-            >
+               variant="outlined"
+               (click)="undoBought.emit()"
+               class="w-full sm:w-auto"
+            />
          }
       </div>
    </ng-template>

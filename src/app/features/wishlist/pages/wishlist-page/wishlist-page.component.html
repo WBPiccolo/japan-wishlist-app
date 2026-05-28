@@ -9,11 +9,11 @@
    }
 </div>
 
-<div class="flex flex-row flex-wrap gap-4">
+<div class="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-4">
    @for (item of wishlistObs$ | async; track $index) {
       @if (isAdminMode || !hideDeleted || !item.isDeleted) {
          <app-wishlist-item
-            class="basis-1/5 cursor-pointer"
+            class="h-[420px] cursor-pointer"
             [canDelete]="isAdminMode"
             [item]="item"
             (itemClicked)="handleItemClick(item)"

@@ -1,34 +1,39 @@
 <div
    #card
-   class="max-w-80 rounded-xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden"
-   [ngClass]="{ 'opacity-30': item?.isDeleted }"
+   class="w-full h-full rounded-xl bg-white dark:bg-surface-900 shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden cursor-pointer flex flex-col"
+   [class.opacity-30]="item?.isDeleted"
    (click)="itemClicked.emit()"
 >
    <!-- Image -->
-   <div class="group w-full overflow-hidden bg-slate-50 rounded-xl max-h-48 hover:max-h-96 transition-[max-height] duration-500 ease-in-out">
+   <div class="group w-full overflow-hidden bg-slate-50 h-48 hover:h-80 transition-[height] duration-500 ease-in-out shrink-0">
       <img
          [src]="item?.imageURL"
-         class="w-full h-full object-contain transition-transform duration-700 ease-out group-hover:scale-105"
+         [alt]="item?.name"
+         class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
       />
    </div>
 
    <!-- Content -->
-   <div class="p-4 flex flex-col gap-2 h-40">
+   <div class="p-5 flex flex-col gap-3 flex-1">
       <!-- Title -->
-      <div class="text-lg font-semibold tracking-wide text-slate-800">
+      <div class="text-lg font-semibold tracking-wide text-slate-800 dark:text-surface-0 line-clamp-1">
          {{ item?.name }}
       </div>
 
       <!-- Description -->
-      <div class="text-sm text-slate-500 leading-relaxed line-clamp-2">
+      <div class="text-sm text-slate-500 dark:text-surface-400 leading-relaxed line-clamp-2">
          {{ item?.description }}
       </div>
 
-      <!-- Price -->
-      <div class="flex justify-between items-center mt-2">
-         <div class="text-sm text-slate-600">€ {{ item?.minPrice }} - € {{ item?.maxPrice }}</div>
+      <!-- Location -->
+      <div class="flex items-center gap-1.5 text-sm text-slate-400 dark:text-surface-500">
+         <i class="pi pi-map-marker text-xs"></i>
+         <span class="truncate">{{ item?.location || 'Posizione non indicata' }}</span>
+      </div>
 
-         <!-- Status -->
+      <!-- Price + Status — spinto in fondo -->
+      <div class="flex justify-between items-center mt-auto pt-3">
+         <div class="text-sm text-slate-600 dark:text-surface-300">€ {{ item?.minPrice }} – € {{ item?.maxPrice }}</div>
          <div
             class="text-xs px-2 py-1 rounded-full"
             [ngClass]="{
@@ -39,7 +44,9 @@
             {{ item?.status }}
          </div>
       </div>
-      <div class="text-xs italic text-slate-300">{{ item?.id }}</div>
+
+      <!-- ID -->
+      <div class="text-xs italic text-slate-300 dark:text-surface-600">{{ item?.id }}</div>
    </div>
 </div>
 

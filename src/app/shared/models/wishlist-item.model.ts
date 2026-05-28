@@ -4,8 +4,8 @@ export interface WishlistItem {
    imageURL?: string
    description?: string
    location?: string
-   minPrice?: string
-   maxPrice?: string
+   minPrice?: number
+   maxPrice?: number
    price?: number | null
    status: 'BOUGHT' | 'NOT_BOUGHT'
    isDeleted?: boolean
