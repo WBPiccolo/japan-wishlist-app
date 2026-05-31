@@ -6,6 +6,15 @@
          label="Add new item"
          (click)="openAddItemDialog()"
       ></p-button>
+      <div>
+         <p-checkbox
+            inputId="recieveNotifications"
+            [(ngModel)]="reciveNotifications"
+            [binary]="true"
+            (onChange)="handleNotificationsPermissions($event)"
+         />
+         <label for="recieveNotifications"> Ricevi Notifiche </label>
+      </div>
    }
 </div>
 

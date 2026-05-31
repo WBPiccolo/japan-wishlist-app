@@ -12,6 +12,7 @@ import { ButtonModule } from 'primeng/button'
 import { ToastModule } from 'primeng/toast'
 import { ConfirmationService, MessageService } from 'primeng/api'
 import { AddItemDialogComponent } from '../../components/add-item-dialog/add-item-dialog.component'
+import { CheckboxChangeEvent, CheckboxModule } from 'primeng/checkbox'
 
 @Component({
    selector: 'app-wishlist-page',
@@ -25,6 +26,7 @@ import { AddItemDialogComponent } from '../../components/add-item-dialog/add-ite
       ConfirmDialogModule,
       ToastModule,
       AddItemDialogComponent,
+      CheckboxModule,
    ],
    templateUrl: './wishlist-page.component.html',
    styleUrl: './wishlist-page.component.scss',
@@ -37,6 +39,7 @@ export class WishlistPageComponent implements OnInit {
    showUpdateItemDialog: boolean = false
    isAdminMode: boolean = false
    hideDeleted: boolean = true
+   reciveNotifications: boolean = Notification.permission === 'granted'
 
    showAddItemDialog: boolean = false
 
@@ -47,24 +50,70 @@ export class WishlistPageComponent implements OnInit {
       this.wishlistObs$ = this.wishlistService.getWishlistItems()
    }
 
+   handleNotificationsPermissions(event: CheckboxChangeEvent) {
+      console.log('aaaaa', event, this.reciveNotifications)
+      if (this.reciveNotifications) {
+         Notification.requestPermission().then((result) => {
+            console.log('notifications', result)
+         })
+      }
+   }
+
    handleItemClick(item: WishlistItem) {
       console.log('clicked item', item)
       this.itemToUpdate = item
       this.showUpdateItemDialog = true
    }
 
-   handleItemBought(price: number) {
+   async handleItemBought(price: number) {
       const updatedItem: WishlistItem = { ...this.itemToUpdate!, status: 'BOUGHT', price: price }
-      this.wishlistService.updateItem(updatedItem)
-      this.itemToUpdate = null
-      this.handleCloseUpdateItemDialog()
+      try {
+         await this.wishlistService.updateItem(updatedItem)
+
+         this.messageService.add({
+            severity: 'success',
+            summary: 'Successo',
+            detail: 'Articolo aggiornato correttamente',
+         })
+
+         this.itemToUpdate = null
+         this.handleCloseUpdateItemDialog()
+         const notification = new Notification('Oggetto comprato!', {
+            body: `${updatedItem.name} comprato per ${updatedItem.price}€`,
+            icon: updatedItem.imageURL,
+         })
+      } catch (error) {
+         console.error(error)
+
+         this.messageService.add({
+            severity: 'error',
+            summary: 'Errore',
+            detail: "Impossibile aggiornare l'articolo",
+         })
+      }
    }
 
-   handleResetItemStatus() {
+   async handleResetItemStatus() {
       const resettedItem: WishlistItem = { ...this.itemToUpdate!, status: 'NOT_BOUGHT', price: null }
-      this.wishlistService.updateItem(resettedItem)
-      this.itemToUpdate = null
-      this.handleCloseUpdateItemDialog()
+
+      try {
+         await this.wishlistService.updateItem(resettedItem)
+         this.messageService.add({
+            severity: 'success',
+            summary: 'Successo',
+            detail: 'Articolo resettato correttamente',
+         })
+         this.itemToUpdate = null
+         this.handleCloseUpdateItemDialog()
+      } catch (error) {
+         console.error(error)
+
+         this.messageService.add({
+            severity: 'error',
+            summary: 'Errore',
+            detail: "Impossibile resettare l'articolo",
+         })
+      }
    }
 
    handleCloseUpdateItemDialog() {
@@ -123,9 +172,22 @@ export class WishlistPageComponent implements OnInit {
       this.showAddItemDialog = false
    }
 
-   saveNewItem(item: WishlistItem) {
+   async saveNewItem(item: WishlistItem) {
       console.log('aggiunta di', item)
-      this.wishlistService.addItem(item)
-      this.handleCloseAddItemDialog()
+      try {
+         await this.wishlistService.addItem(item)
+         this.handleCloseAddItemDialog()
+         this.messageService.add({
+            severity: 'success',
+            summary: 'Successo',
+            detail: 'Articolo aggiunti correttamente',
+         })
+      } catch (error) {
+         this.messageService.add({
+            severity: 'error',
+            summary: 'Errore',
+            detail: "Impossibile aggiungere l'articolo",
+         })
+      }
    }
 }
