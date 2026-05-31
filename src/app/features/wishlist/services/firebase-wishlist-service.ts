@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core'
 import { Firestore, collection, collectionData } from '@angular/fire/firestore' // ← tutto da @angular/fire
-import { Observable, of } from 'rxjs'
+import { map, Observable, of } from 'rxjs'
 import { WishlistItem } from '../../../shared/models/wishlist-item.model'
 import { addDoc, doc, updateDoc } from 'firebase/firestore'
 
@@ -11,12 +11,15 @@ export class FirebaseWishlistService {
    private firestore = inject(Firestore)
    private col = collection(this.firestore, 'wishlist')
 
-   getWishlistItems() {
-      return collectionData(this.col, { idField: 'id' }) as Observable<WishlistItem[]>
-   }
-
-   addWishlistItem(item: WishlistItem): Observable<WishlistItem> {
-      return of({} as WishlistItem)
+   getWishlistItems(): Observable<WishlistItem[]> {
+      return (collectionData(this.col, { idField: 'id' }) as Observable<WishlistItem[]>).pipe(
+         map((collection) =>
+            collection.sort((a, b) => {
+               if (a.status === b.status) return 0
+               return a.status === 'NOT_BOUGHT' ? -1 : 1
+            })
+         )
+      )
    }
 
    async updateItem(item: WishlistItem): Promise<void> {

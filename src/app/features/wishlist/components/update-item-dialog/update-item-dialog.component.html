@@ -59,8 +59,8 @@
             <label for="price_label">Prezzo (€)</label>
          </p-floatlabel>
       </div>
-      @if (itemToUpdate!.maxPrice && price) {
-         <div>Il prezzo a cui lo stai prendendo è {{ price / itemToUpdate!.maxPrice | percent }} del prezzo massimo!</div>
+      @if (itemToUpdate && itemToUpdate.maxPrice && price) {
+         <div>Il prezzo a cui lo stai prendendo è {{ price / itemToUpdate.maxPrice | percent }} del prezzo massimo!</div>
       }
    </div>
 
