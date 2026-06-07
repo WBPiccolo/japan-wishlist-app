@@ -46,21 +46,27 @@
       </div>
 
       <!-- Input prezzo -->
-      <div class="w-full max-w-xs">
-         <p-floatlabel class="w-full">
-            <p-inputnumber
-               [(ngModel)]="price"
-               inputId="price_label"
-               size="large"
-               [disabled]="itemToUpdate?.status === 'BOUGHT'"
-               inputStyleClass="w-full h-11 px-4 border rounded-lg border-surface-300 dark:border-surface-600"
-               class="w-full"
-            />
-            <label for="price_label">Prezzo (€)</label>
-         </p-floatlabel>
-      </div>
-      @if (itemToUpdate && itemToUpdate.maxPrice && price) {
-         <div>Il prezzo a cui lo stai prendendo è {{ price / itemToUpdate.maxPrice | percent }} del prezzo massimo!</div>
+      @if (itemToUpdate?.status === 'BOUGHT') {
+         <div class="text-center text-xl font-semibold">
+            Comprato per {{ itemToUpdate?.price | currency: 'EUR' }}! <br />
+            Grazie, Federico!
+         </div>
+      } @else {
+         <div class="w-full max-w-xs">
+            <p-floatlabel class="w-full">
+               <p-inputnumber
+                  [(ngModel)]="price"
+                  inputId="price_label"
+                  size="large"
+                  inputStyleClass="w-full h-11 px-4 border rounded-lg border-surface-300 dark:border-surface-600"
+                  class="w-full"
+               />
+               <label for="price_label">Prezzo (€)</label>
+            </p-floatlabel>
+         </div>
+         @if (itemToUpdate && itemToUpdate.maxPrice && price) {
+            <div>Il prezzo a cui lo stai prendendo è {{ price / itemToUpdate.maxPrice | percent }} del prezzo massimo!</div>
+         }
       }
    </div>
 

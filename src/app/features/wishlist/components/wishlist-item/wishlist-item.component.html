@@ -33,7 +33,11 @@
 
       <!-- Price + Status — spinto in fondo -->
       <div class="flex justify-between items-center mt-auto pt-3">
-         <div class="text-sm text-slate-600 dark:text-surface-300">€ {{ item?.minPrice }} – € {{ item?.maxPrice }}</div>
+         @if (item?.status === 'BOUGHT') {
+            <div class="text-sm font-semibold text-slate-600 dark:text-surface-300">Comprato per: {{ item?.price | currency: 'EUR' }}</div>
+         } @else {
+            <div class="text-sm text-slate-600 dark:text-surface-300">{{ item?.minPrice | currency: 'EUR' }} - {{ item?.maxPrice | currency: 'EUR' }}</div>
+         }
          <div
             class="text-xs px-2 py-1 rounded-full"
             [ngClass]="{

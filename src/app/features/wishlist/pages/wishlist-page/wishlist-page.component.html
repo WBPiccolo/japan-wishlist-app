@@ -16,6 +16,7 @@
          <label for="recieveNotifications"> Ricevi Notifiche </label>
       </div>
    }
+   <div>Totale da dare a Fede: {{ wishlistTotalSpent$ | async | currency: 'EUR' }}</div>
 </div>
 
 <div class="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-4">

@@ -2,8 +2,8 @@ import { Component, inject, OnInit } from '@angular/core'
 import { WishlistItem } from '../../../../shared/models/wishlist-item.model'
 import { WishlistItemComponent } from '../../components/wishlist-item/wishlist-item.component'
 import { FirebaseWishlistService } from '../../services/firebase-wishlist-service'
-import { Observable } from 'rxjs'
-import { AsyncPipe, CommonModule } from '@angular/common'
+import { map, Observable, switchMap } from 'rxjs'
+import { AsyncPipe, CommonModule, CurrencyPipe } from '@angular/common'
 import { UpdateItemDialogComponent } from '../../components/update-item-dialog/update-item-dialog.component'
 import { ToggleSwitchModule } from 'primeng/toggleswitch'
 import { FormsModule } from '@angular/forms'
@@ -27,6 +27,7 @@ import { CheckboxChangeEvent, CheckboxModule } from 'primeng/checkbox'
       ToastModule,
       AddItemDialogComponent,
       CheckboxModule,
+      CurrencyPipe,
    ],
    templateUrl: './wishlist-page.component.html',
    styleUrl: './wishlist-page.component.scss',
@@ -34,6 +35,7 @@ import { CheckboxChangeEvent, CheckboxModule } from 'primeng/checkbox'
 export class WishlistPageComponent implements OnInit {
    wishlistService = inject(FirebaseWishlistService)
    wishlistObs$: Observable<WishlistItem[]> = new Observable()
+   wishlistTotalSpent$: Observable<number> = new Observable()
 
    itemToUpdate: WishlistItem | null = null
    showUpdateItemDialog: boolean = false
@@ -48,13 +50,14 @@ export class WishlistPageComponent implements OnInit {
 
    ngOnInit(): void {
       this.wishlistObs$ = this.wishlistService.getWishlistItems()
+      this.wishlistTotalSpent$ = this.wishlistObs$.pipe(map((items) => items.reduce((acc, item) => acc + (item.price || 0), 0)))
    }
 
    handleNotificationsPermissions(event: CheckboxChangeEvent) {
-      console.log('aaaaa', event, this.reciveNotifications)
-      if (this.reciveNotifications) {
+      if (!this.reciveNotifications) {
          Notification.requestPermission().then((result) => {
             console.log('notifications', result)
+            this.reciveNotifications = result === 'granted'
          })
       }
    }
@@ -78,10 +81,13 @@ export class WishlistPageComponent implements OnInit {
 
          this.itemToUpdate = null
          this.handleCloseUpdateItemDialog()
-         const notification = new Notification('Oggetto comprato!', {
-            body: `${updatedItem.name} comprato per ${updatedItem.price}€`,
-            icon: updatedItem.imageURL,
-         })
+         if (Notification.permission === 'granted') {
+            console.log('mostro notifica')
+            new Notification('Oggetto comprato!', {
+               body: `${updatedItem.name} comprato per ${updatedItem.price}€`,
+               icon: updatedItem.imageURL,
+            })
+         }
       } catch (error) {
          console.error(error)
 
