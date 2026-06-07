@@ -56,8 +56,9 @@
             <p-floatlabel class="w-full">
                <p-inputnumber
                   [(ngModel)]="price"
+                  mode="currency"
+                  currency="EUR"
                   inputId="price_label"
-                  size="large"
                   inputStyleClass="w-full h-11 px-4 border rounded-lg border-surface-300 dark:border-surface-600"
                   class="w-full"
                />
