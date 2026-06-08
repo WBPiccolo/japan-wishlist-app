@@ -56,9 +56,10 @@
             <p-floatlabel class="w-full">
                <p-inputnumber
                   [(ngModel)]="price"
-                  mode="currency"
-                  currency="EUR"
                   inputId="price_label"
+                  mode="decimal"
+                  [minFractionDigits]="2"
+                  [maxFractionDigits]="2"
                   inputStyleClass="w-full h-11 px-4 border rounded-lg border-surface-300 dark:border-surface-600"
                   class="w-full"
                />
@@ -77,7 +78,8 @@
             <p-button
                icon="pi pi-shopping-cart"
                label="Comprato!"
-               (click)="itemBought.emit(price)"
+               [disabled]="!price"
+               (click)="itemBought.emit(price!)"
                class="w-full sm:w-auto"
             />
          } @else {

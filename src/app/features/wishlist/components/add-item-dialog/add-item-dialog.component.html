@@ -96,8 +96,9 @@
                <span class="text-xs uppercase tracking-wide text-surface-400">Min</span>
                <p-inputnumber
                   formControlName="minPrice"
-                  mode="currency"
-                  currency="EUR"
+                  mode="decimal"
+                  [minFractionDigits]="2"
+                  [maxFractionDigits]="2"
                   [min]="0"
                   [max]="newItemFormGroup.value.maxPrice"
                   inputStyleClass="w-full h-10 px-3 border rounded-md border-surface-300 dark:border-surface-600"
@@ -109,8 +110,9 @@
                <span class="text-xs uppercase tracking-wide text-surface-400">Max</span>
                <p-inputnumber
                   formControlName="maxPrice"
-                  mode="currency"
-                  currency="EUR"
+                  mode="decimal"
+                  [minFractionDigits]="2"
+                  [maxFractionDigits]="2"
                   [min]="newItemFormGroup.value.minPrice"
                   inputStyleClass="w-full h-10 px-3 border rounded-md border-surface-300 dark:border-surface-600"
                   class="w-full"

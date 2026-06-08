@@ -19,12 +19,13 @@ export class UpdateItemDialogComponent {
    @Output() itemBought = new EventEmitter<number>()
    @Output() undoBought = new EventEmitter<number>()
 
-   price: number = 0
+   price: number | null = null
 
    isImageExpanded: boolean = false
 
    initModal() {
       this.isImageExpanded = false
+      this.price = null
    }
 
    toggleFullImage() {
